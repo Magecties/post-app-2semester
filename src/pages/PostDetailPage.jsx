@@ -15,23 +15,35 @@ export default function PostDetailPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  
+  const URL = import.meta.env.VITE_SUPABASE_URL;
+  const APIKEY = import.meta.env.VITE_SUPABASE_APIKEY;
+  
   useEffect(() => {
     async function loadPost() {
-      // TODO:
-      // 1. Hent ét post med GET
-      // 2. Brug id i querystring
-      // 3. Gem resultat i post state
-      //
-      // Ekstra bagefter:
-      // - loading
-      // - try/catch
-      // - fejlbesked
-      console.log(id, URL, headers);
+      setIsLoading(true);
+      setErrorMessage("");
+
+      try {
+        const response = await fetch(`${URL}?id=eq.${id}&select=*`, {
+          headers
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to load post");
+        }
+
+        const data = await response.json();
+        setPost(data[0] ?? null);
+      } catch (error) {
+        setErrorMessage(error.message || "Something went wrong");
+      } finally {
+        setIsLoading(false);
+      }
     }
 
     loadPost();
   }, [id]);
-
   async function handleDelete() {
     const confirmed = window.confirm("Delete this post?");
 
@@ -45,6 +57,15 @@ export default function PostDetailPage() {
     // - isDeleting
     // - try/catch
     // - fejlbesked
+
+    await fetch(`${URL}?id=eq.${id}`, {
+      method: "DELETE",
+      headers: {
+        apikey: APIKEY,
+        "Content-Type": "application/json",
+      },
+    });
+
     setIsDeleting(true);
     console.log(id);
     navigate("/");

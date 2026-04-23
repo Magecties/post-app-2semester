@@ -27,6 +27,8 @@ export default function UpdatePage() {
       // - loading
       // - try/catch
       // - fejlbesked
+
+      
       console.log(id, URL, headers);
     }
 
@@ -42,6 +44,21 @@ export default function UpdatePage() {
     // - isSubmitting
     // - try/catch
     // - fejlbesked
+
+     const URL = import.meta.env.VITE_SUPABASE_URL;
+ const APIKEY = import.meta.env.VITE_SUPABASE_APIKEY;
+
+
+    await fetch(`${URL}?id=eq.${id}`, {
+    method: "PATCH",
+    headers: {
+      apikey: APIKEY,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(postData),
+  });
+    
+    
     console.log(postData, id);
     navigate(`/posts/${id}`);
   }

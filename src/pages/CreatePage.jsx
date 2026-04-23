@@ -23,6 +23,19 @@ export default function CreatePage() {
     // - isSubmitting
     // - try/catch
     // - fejlbesked
+
+     const URL = import.meta.env.VITE_SUPABASE_URL;
+    const APIKEY = import.meta.env.VITE_SUPABASE_APIKEY;
+
+    await fetch(URL, {
+  method: "POST",
+  headers: {
+    apikey: APIKEY,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(postData),
+});
+
     console.log(postData, URL, headers);
     navigate("/");
   }

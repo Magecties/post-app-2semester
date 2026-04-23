@@ -23,8 +23,20 @@ export default function HomePage() {
       // - loading
       // - try/catch
       // - fejlbesked
-      console.log(URL, headers);
-    }
+
+      const URL = import.meta.env.VITE_SUPABASE_URL;
+  const APIKEY = import.meta.env.VITE_SUPABASE_APIKEY;
+
+     const response = await fetch(URL, {
+      headers: {
+        apikey: APIKEY,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    setPosts(data);
+  }
 
     loadPosts();
   }, []);
